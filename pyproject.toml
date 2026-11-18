@@ -1,0 +1,140 @@
+[build-system]
+requires = ["hatchling>=1.18"]
+build-backend = "hatchling.build"
+
+[project]
+name = "lupaxa-magic-bytes"
+dynamic = ["version"]
+description = "Offline command-line tool for identifying, validating, and extracting binary file structures."
+readme = "README.md"
+license = { file = "LICENCE" }
+requires-python = ">=3.11"
+authors = [
+  { name = "The Lupaxa Project" },
+]
+keywords = [
+  "binary",
+  "file-formats",
+  "forensics",
+  "cli",
+]
+dependencies = [
+  "platformdirs>=4.2.0",
+  "rich>=13.0.0",
+  "typer>=0.12.0",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: MacOS",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: POSIX :: Linux",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Security",
+  "Topic :: System :: Filesystems",
+  "Topic :: Utilities",
+]
+[project.urls]
+Homepage = "https://github.com/lupaxa-security-toolbox/magic-bytes"
+Repository = "https://github.com/lupaxa-security-toolbox/magic-bytes"
+Issues = "https://github.com/lupaxa-security-toolbox/magic-bytes/issues"
+
+[project.scripts]
+magic-bytes = "lupaxa.magic_bytes.cli:main"
+
+[project.optional-dependencies]
+dev = [
+  "bump-my-version>=1.2.0",
+  "hypothesis>=6.100",
+  "mypy>=1.12.0",
+  "pytest>=8.0",
+  "pytest-cov>=5.0",
+  "ruff>=0.6.0",
+]
+test = [
+  "hypothesis>=6.100",
+  "pytest>=8.0",
+  "pytest-cov>=5.0",
+]
+
+[tool.hatch.version]
+path = "src/lupaxa/magic_bytes/version.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "src/**",
+  "README.md",
+  "LICENCE",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/lupaxa"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = [
+  "E",
+  "F",
+  "I",
+  "B",
+  "S",
+  "UP",
+  "SIM",
+  "C4",
+  "ISC",
+  "D",
+  "ANN",
+  "PT",
+]
+ignore = [
+  "D100",
+  "D104",
+  "D107",
+  "D200",
+  "D201",
+  "D202",
+  "D203",
+  "D204",
+  "D205",
+  "D206",
+  "D207",
+  "D208",
+  "D209",
+  "D210",
+  "D211",
+  "D212",
+  "D213",
+  "S311",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101", "S105", "S106", "ANN001", "ANN201", "D103"]
+"src/lupaxa/magic_bytes/cli.py" = ["B008"]
+
+[tool.ruff.lint.pydocstyle]
+convention = "numpy"
+
+[tool.mypy]
+python_version = "3.11"
+warn_unused_configs = true
+warn_return_any = true
+warn_unused_ignores = true
+disallow_untyped_defs = true
+follow_imports = "normal"
+ignore_missing_imports = true
+packages = ["lupaxa.magic_bytes"]
+mypy_path = "src"
+
+[tool.pytest.ini_options]
+addopts = "-ra --disable-warnings"
+testpaths = ["tests"]
+pythonpath = ["."]
