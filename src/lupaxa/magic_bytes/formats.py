@@ -364,12 +364,25 @@ def validate_bmp(blob: Blob, origin: int, level: str, budget: Budget) -> Validat
         return _failed("bmp", level, checks, regions)
     info = blob.read_at(origin + 14, dib_size)
     if dib_size == 12 and len(info) >= 12:
-        _width, _height, planes, depth = struct.unpack_from("<HHHH", info, 4)
+        width, height, planes, depth = struct.unpack_from("<HHHH", info, 4)
+        height_ok = height > 0
     elif dib_size >= 16 and len(info) >= 16:
-        _width, _height = struct.unpack_from("<ii", info, 4)
+        width, height = struct.unpack_from("<ii", info, 4)
         planes, depth = struct.unpack_from("<HH", info, 12)
+        height_ok = height != 0
     else:
-        planes, depth = 0, 0
+        width, height, planes, depth = 0, 0, 0, 0
+        height_ok = False
+    dimension_ok = isinstance(width, int) and isinstance(height, int) and width > 0 and height_ok
+    checks.append(
+        _check(
+            "dimensions",
+            dimension_ok,
+            f"Dimensions {width}x{abs(height) if isinstance(height, int) else 0}",
+            origin + 18,
+            origin + 14 + dib_size,
+        )
+    )
     checks.append(_check("planes", planes == 1, f"Planes {planes}", origin + 14, origin + 14 + dib_size))
     checks.append(_check("depth", depth in {1, 2, 4, 8, 16, 24, 32}, f"Bit depth {depth}", origin, origin + 4))
     logical = declared if origin + declared <= blob.size and declared >= pixel_offset else None
