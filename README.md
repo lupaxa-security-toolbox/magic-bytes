@@ -18,7 +18,7 @@ Python 3.11 or newer:
 pip install lupaxa-magic-bytes
 ```
 
-The command is `magic-bytes`.
+The command is `magic-bytes`. The import path is `lupaxa.magic_bytes`. `lupaxa` is a namespace package — there is no `lupaxa/__init__.py`.
 
 ## Quick Start
 

@@ -133,6 +133,8 @@ follow_imports = "normal"
 ignore_missing_imports = true
 packages = ["lupaxa.magic_bytes"]
 mypy_path = "src"
+explicit_package_bases = true
+namespace_packages = true
 
 [tool.pytest.ini_options]
 addopts = "-ra --disable-warnings"
